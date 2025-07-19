@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Redirecionando...</title>
+
+  <script>
+    !function(f,b,e,v,n,t,s){
+      if(f.fbq)return;n=f.fbq=function(){\n        n.callMethod?\n        n.callMethod.apply(n,arguments):n.queue.push(arguments)\n      };\n      if(!f._fbq)f._fbq=n;\n      n.push=n;n.loaded=!0;n.version='2.0';\n      n.queue=[];\n      t=b.createElement(e);t.async=!0;\n      t.src='https://connect.facebook.net/en_US/fbevents.js';\n      s=b.getElementsByTagName(e)[0];\n      s.parentNode.insertBefore(t,s)\n    }(window, document,'script');
+    fbq('init', '1616232952319054');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"\n      src="https://www.facebook.com/tr?id=1616232952319054&ev=PageView&noscript=1"/>
+  </noscript>
+  <script>
+    // URL da sua API do Google Apps Script para registrar cliques
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzHgxJaZdY3W0JYSmtyg6eWPoBMgcqfY-v_RrSQ6FZ6qgxOk0x940U7CrMFFrGvCDYbJQ/exec?path=registerClick';
+    const TELEGRAM_USERNAME = 'joyyccejacobot'; // Seu nome de usuário do Telegram
+
+    const botKeywords = [
+      'facebookexternalhit', 'facebot', 'twitterbot', 'linkedinbot',
+      'slackbot', 'telegrambot', 'whatsapp', 'discordbot',
+      'googlebot', 'bingbot', 'crawler', 'spider', 'preview',
+      'httpclient', 'fetch'
+    ];
+
+    function isBot() {
+      const ua = navigator.userAgent.toLowerCase();
+      return botKeywords.some(bot => ua.includes(bot));
+    }
+
+    function isMobile() {
+      return /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+    }
+
+    function isTouchDevice() {
+      return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    }
+
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    }
+
+    function setCookie(name, value, days = 90) {
+      const expires = new Date(Date.now() + days * 864e5).toUTCString();
+      document.cookie = `${name}=${value}; expires=${expires}; path=/; SameSite=Lax`;
+    }
+
+    function getFbclid() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('fbclid');
+    }
+
+    function generateFbp() {
+      const timestamp = Date.now();
+      const random = Math.floor(Math.random() * 1e16);
+      return `fb.1.${timestamp}.${random}`;
+    }
+
+    function ensureFbp() {
+      let fbp = getCookie('_fbp');
+      if (!fbp) {
+        fbp = generateFbp();
+        setCookie('_fbp', fbp);
+      }
+      return fbp;
+    }
+
+    function ensureFbc(fbclid) {
+      const current = getCookie('_fbc');
+      if (current && current.endsWith(fbclid)) return current;
+
+      const timestamp = Date.now();
+      const fbc = `fb.1.${timestamp}.${fbclid}`;
+      setCookie('_fbc', fbc);
+      return fbc;
+    }
+
+    // Função atualizada para registrar o clique na sua API do Google Apps Script
+    async function registrarClick(fbclid, fbp) {
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+            // 'x-api-key' não é mais necessário aqui para o Google Apps Script
+          },
+          body: JSON.stringify({
+            fbclid,
+            fbp,
+            referer: document.referrer || '' // Inclui o referer
+          })
+        });
+
+        const data = await response.json();
+        if (data.status === 'success') {
+          return data.click_id;
+        } else {
+          console.error('Erro ao registrar click (API response):', data.message);
+          return null;
+        }
+      } catch (error) {
+        console.error('Erro ao registrar click (network error):', error);
+        return null;
+      }
+    }
+
+    (async function main() {
+      // Verifica se é bot ou não é dispositivo móvel com toque
+      if (isBot() || !(isMobile() && isTouchDevice())) {
+        window.location.replace('https://fernandatamires.netlify.app/'); // Redireciona para página neutra
+        return;
+      }
+
+      const fbclid = getFbclid();
+      if (!fbclid) {
+        window.location.replace('https://fernandatamires.netlify.app/'); // Redireciona se não houver fbclid
+        return;
+      }
+
+      const fbp = ensureFbp(); // Garante que o _fbp exista e seja salvo no cookie
+      ensureFbc(fbclid); // Garante que o _fbc exista e seja salvo no cookie
+
+      const click_id = await registrarClick(fbclid, fbp); // Registra o clique e obtém o click_id
+
+      if (click_id) {
+        const url = `https://t.me/${TELEGRAM_USERNAME}?start=${click_id}`;
+        window.location.replace(url); // Redireciona para o Telegram com o click_id
+      } else {
+        window.location.replace('https://fernandatamires.netlify.app/'); // Redireciona fallback em caso de erro
+      }
+    })();
+  </script>
+</head>
+<body>
+</body>
+</html>
