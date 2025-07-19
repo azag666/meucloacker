@@ -7,17 +7,28 @@
 
   <script>
     !function(f,b,e,v,n,t,s){
-      if(f.fbq)return;n=f.fbq=function(){\n        n.callMethod?\n        n.callMethod.apply(n,arguments):n.queue.push(arguments)\n      };\n      if(!f._fbq)f._fbq=n;\n      n.push=n;n.loaded=!0;n.version='2.0';\n      n.queue=[];\n      t=b.createElement(e);t.async=!0;\n      t.src='https://connect.facebook.net/en_US/fbevents.js';\n      s=b.getElementsByTagName(e)[0];\n      s.parentNode.insertBefore(t,s)\n    }(window, document,'script');
-    fbq('init', '1616232952319054');
+      if(f.fbq)return;n=f.fbq=function(){
+        n.callMethod? n.callMethod.apply(n,arguments):n.queue.push(arguments)
+      };
+      if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];
+      t=b.createElement(e);t.async=!0;
+      t.src='https://connect.facebook.net/en_US/fbevents.js';
+      s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)
+    }(window, document,'script');
+    fbq('init', '1616232952319054'); // Seu Pixel ID. Já está preenchido.
     fbq('track', 'PageView');
   </script>
   <noscript>
-    <img height="1" width="1" style="display:none"\n      src="https://www.facebook.com/tr?id=1616232952319054&ev=PageView&noscript=1"/>
+    <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1616232952319054&ev=PageView&noscript=1"/>
   </noscript>
   <script>
     // URL da sua API do Google Apps Script para registrar cliques
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzHgxJaZdY3W0JYSmtyg6eWPoBMgcqfY-v_RrSQ6FZ6qgxOk0x940U7CrMFFrGvCDYbJQ/exec?path=registerClick';
-    const TELEGRAM_USERNAME = 'joyyccejacobot'; // Seu nome de usuário do Telegram
+    const API_URL = 'https://script.google.com/macros/s/AKfycby6gl7O60HsjhIZ_Bss0pkmQWeJsz10b1u4j-BNd6Tf0dGEbIfMNeWxrKTBu2ghWTF0PA/exec?path=registerClick';
+    const TELEGRAM_USERNAME = 'joyyccejacobot'; // <--- SEU NOME DE USUÁRIO DO BOT TELEGRAM AQUI!
 
     const botKeywords = [
       'facebookexternalhit', 'facebot', 'twitterbot', 'linkedinbot',
